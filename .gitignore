@@ -16,6 +16,7 @@ Bin
 *.suo
 *.cache
 Thumbs.db
+.vs
  
 # Other useful stuff
 *.bak

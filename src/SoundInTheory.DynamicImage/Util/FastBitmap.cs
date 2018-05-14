@@ -96,7 +96,21 @@ namespace SoundInTheory.DynamicImage.Util
 		    image.BeginInit();
             image.CacheOption = BitmapCacheOption.OnLoad;
             image.UriSource = new Uri(filename, uriKind);
-            image.EndInit();
+
+            try
+            {
+                image.EndInit();
+            }
+            catch (ArgumentException)
+            {
+                // This exception may mean that the color profile on the image is corrupted - try again and ignore it
+                image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.UriSource = new Uri(filename, uriKind);
+                image.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
+                image.EndInit();
+            }
 
 			InnerBitmap = new WriteableBitmap(ConvertFormat(image));
 		}
